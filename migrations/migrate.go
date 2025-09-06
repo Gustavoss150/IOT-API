@@ -11,6 +11,8 @@ func Migrate() {
 		&entities.User{},
 		&entities.Machine{},
 		&entities.Reservation{},
+		&entities.AccessKey{},
+		&entities.EventLog{},
 	)
 
 	if err != nil {
