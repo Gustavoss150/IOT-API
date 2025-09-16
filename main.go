@@ -19,5 +19,5 @@ func main() {
 	r.GET("/", func(c *gin.Context) {
 		c.JSON(200, gin.H{"message": "API is working"})
 	})
-	r.Run("8080")
+	r.Run(":8080")
 }

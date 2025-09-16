@@ -18,8 +18,8 @@ type EventLog struct {
 	Message       string     `gorm:"type:text" json:"message,omitempty"`
 
 	// Relações
-	AccessKey   AccessKey   `gorm:"foreignKey:AccessKeyID" json:"access_key,omitempty"`
-	User        User        `gorm:"foreignKey:UserID" json:"user,omitempty"`
-	Machine     Machine     `gorm:"foreignKey:MachineID" json:"machine,omitempty"`
-	Reservation Reservation `gorm:"foreignKey:ReservationID" json:"reservation,omitempty"`
+	// AccessKey   *AccessKey   `gorm:"foreignKey:AccessKeyID;references:ID" json:"access_key,omitempty"`
+	// User        *User        `gorm:"foreignKey:UserID;references:ID" json:"user,omitempty"`
+	// Machine     *Machine     `gorm:"foreignKey:MachineID;references:ID" json:"machine,omitempty"`
+	// Reservation *Reservation `gorm:"foreignKey:ReservationID;references:ID" json:"reservation,omitempty"`
 }

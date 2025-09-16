@@ -25,6 +25,6 @@ type AccessKey struct {
 	ReservationID string    `gorm:"size:36;index" json:"reservation_id,omitempty"`
 
 	// Relações
-	User        User        `gorm:"foreignKey:AssignedTo" json:"user,omitempty"`
-	Reservation Reservation `gorm:"foreignKey:ReservationID" json:"reservation,omitempty"`
+	// User        *User        `gorm:"foreignKey:AssignedTo;references:ID" json:"user,omitempty"`
+	// Reservation *Reservation `gorm:"foreignKey:ReservationID;references:ID" json:"reservation,omitempty"`
 }

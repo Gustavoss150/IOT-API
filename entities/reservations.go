@@ -11,7 +11,7 @@ type Reservation struct {
 	ReservationEnd   time.Time `gorm:"not null" json:"reservation_end"`
 
 	// Relações (para queries com joins)
-	User        User    `gorm:"foreignKey:UserID" json:"user,omitempty"`
-	Machine     Machine `gorm:"foreignKey:machineID" json:"machine,omitempty"`
-	Responsible User    `gorm:"foreignKey:ResponsibleID" json:"responsible,omitempty"`
+	// User        *User    `gorm:"foreignKey:UserID;references:ID" json:"user,omitempty"`
+	// Machine     *Machine `gorm:"foreignKey:machineID;references:ID" json:"machine,omitempty"`
+	// Responsible *User    `gorm:"foreignKey:ResponsibleID;references:ID" json:"responsible,omitempty"`
 }
