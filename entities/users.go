@@ -11,7 +11,7 @@ const (
 
 type User struct {
 	BaseEntity
-	FullName string   `gorm:"size:255;not null" json:"full_name"`
+	FullName string   `gorm:"size:255" json:"full_name,omitempty"`
 	Email    string   `gorm:"size:150;uniqueIndex;not null" json:"email"`
 	Username string   `gorm:"size:150;uniqueIndex;not null" json:"username"`
 	Password string   `gorm:"size:255" json:"password,omitempty"`
