@@ -23,6 +23,8 @@ type AccessKey struct {
 	Value         string    `gorm:"size:255;uniqueIndex;notnull" json:"value"`
 	AssignedTo    string    `gorm:"size:36;index" json:"assigned_to,omitempty"`
 	ReservationID string    `gorm:"size:36;index" json:"reservation_id,omitempty"`
+	// IsActive (desativado por padrão) para ativar chave quando iniciar o horário de reserva
+	// IsActive		bool	`json:"is_active"`
 
 	// Relações
 	// User        *User        `gorm:"foreignKey:AssignedTo;references:ID" json:"user,omitempty"`
