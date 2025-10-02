@@ -8,7 +8,7 @@ import (
 )
 
 func CreateReservation(reservationDTO dto.ReservationDTO, repo reservationRepo.ReservationRepository) (*entities.Reservation, error) {
-	if reservationDTO.UserID == "" || reservationDTO.MachineID == "" {
+	if reservationDTO.UserID == "" || reservationDTO.EquipmentID == "" {
 		return nil, errors.New("id do usuário e da máquina não podem ser nulos")
 	}
 
@@ -16,7 +16,7 @@ func CreateReservation(reservationDTO dto.ReservationDTO, repo reservationRepo.R
 		return nil, errors.New("horário de término da reserva deve ser após o horário de início")
 	}
 
-	conflict, err := repo.HasReservationConflict(reservationDTO.MachineID, reservationDTO.ReservationStart, reservationDTO.ReservationEnd)
+	conflict, err := repo.HasReservationConflict(reservationDTO.EquipmentID, reservationDTO.ReservationStart, reservationDTO.ReservationEnd)
 	if err != nil {
 		return nil, err
 	}
@@ -26,7 +26,7 @@ func CreateReservation(reservationDTO dto.ReservationDTO, repo reservationRepo.R
 
 	reservation := &entities.Reservation{
 		UserID:           reservationDTO.UserID,
-		MachineID:        reservationDTO.MachineID,
+		EquipmentID:      reservationDTO.EquipmentID,
 		ResponsibleID:    reservationDTO.ResponsibleID,
 		ReservationStart: reservationDTO.ReservationStart,
 		ReservationEnd:   reservationDTO.ReservationEnd,

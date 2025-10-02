@@ -33,10 +33,10 @@ func (r *reservationRepository) GetByID(id string) (*entities.Reservation, error
 	return &reservation, nil
 }
 
-func (r *reservationRepository) HasReservationConflict(machineID string, start, end time.Time) (bool, error) {
+func (r *reservationRepository) HasReservationConflict(equipmentID string, start, end time.Time) (bool, error) {
 	var count int64
 	err := r.DB.Model(&entities.Reservation{}).
-		Where("machine_id = ? AND reservation_end > ? AND reservation_start < ?", machineID, start, end).
+		Where("equipment_id = ? AND reservation_end > ? AND reservation_start < ?", equipmentID, start, end).
 		Count(&count).Error
 	if err != nil {
 		return false, err

@@ -9,7 +9,7 @@ import (
 func Migrate() {
 	err := config.DB.AutoMigrate(
 		&entities.User{},
-		&entities.Machine{},
+		&entities.Equipment{},
 		&entities.Reservation{},
 		&entities.AccessKey{},
 		&entities.EventLog{},
