@@ -13,6 +13,7 @@ func Migrate() {
 		&entities.Reservation{},
 		&entities.AccessKey{},
 		&entities.EventLog{},
+		&entities.BotConfig{},
 	)
 
 	if err != nil {
