@@ -33,10 +33,10 @@ func (r *reservationRepository) GetByID(id string) (*entities.Reservation, error
 	return &reservation, nil
 }
 
-func (r *reservationRepository) HasReservationConflict(machineID string, start, end time.Time) (bool, error) {
+func (r *reservationRepository) HasReservationConflict(equipmentID string, start, end time.Time) (bool, error) {
 	var count int64
 	err := r.DB.Model(&entities.Reservation{}).
-		Where("machine_id = ? AND reservation_end > ? AND reservation_start < ?", machineID, start, end).
+		Where("equipment_id = ? AND reservation_end > ? AND reservation_start < ?", equipmentID, start, end).
 		Count(&count).Error
 	if err != nil {
 		return false, err
@@ -52,4 +52,22 @@ func (r *reservationRepository) GetAllReservationsByDay(day time.Time) ([]entiti
 		return nil, errors.New("sem reservas encontradas para o dia especificado")
 	}
 	return reservations, nil
+}
+
+func (r *reservationRepository) GetByUserID(userID string) ([]entities.Reservation, error) {
+	var reservations []entities.Reservation
+	err := r.DB.Preload("Equipment").
+		Where("user_id = ?", userID).
+		Order("reservation_start DESC").
+		Find(&reservations).Error
+	return reservations, err
+}
+
+func (r *reservationRepository) GetByMachineID(equipmentID string) ([]entities.Reservation, error) {
+	var reservations []entities.Reservation
+	err := r.DB.Preload("User").
+		Where("equipment_id = ?", equipmentID).
+		Order("reservation_start ASC").
+		Find(&reservations).Error
+	return reservations, err
 }
