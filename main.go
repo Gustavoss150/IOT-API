@@ -4,6 +4,7 @@ import (
 	"api/config"
 	"api/migrations"
 	"api/services"
+	"api/server"
 
 	"github.com/gin-gonic/gin"
 )
@@ -16,8 +17,6 @@ func main() {
 	r := gin.Default()
 
 	// server.InitRouter(r)
-
-	go services.StartMQTT()
 
 	r.GET("/", func(c *gin.Context) {
 		c.JSON(200, gin.H{"message": "API is working"})

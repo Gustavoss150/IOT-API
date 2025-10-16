@@ -23,3 +23,11 @@ func InitAccessKeyDatabase() (AccessKeysRepository, error) {
 func (r *accessKeysRepository) Save(accessKey *entities.AccessKey) error {
 	return r.DB.Save(accessKey).Error
 }
+
+func (r *accessKeysRepository) Get(accessKey string) (*entities.AccessKey, error) {
+	var key entities.AccessKey
+	if err := r.DB.Where("id = ?", accessKey).First(&key).Error; err != nil {
+		return nil, errors.New("chave não encontrada")
+	}
+	return &key, nil
+}
