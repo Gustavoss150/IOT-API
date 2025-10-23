@@ -52,7 +52,7 @@ func GetUserProfile(usersRepo usersRepo.UsersRepository, userID string) (*entiti
 	return usersRepo.GetByID(userID)
 }
 
-func ListUsers(usersRepo usersRepo.UsersRepository) ([]*entities.User, error) {
+func GetAllUsers(usersRepo usersRepo.UsersRepository) ([]*entities.User, error) {
 	users, err := usersRepo.GetAll()
 	if err != nil {
 		return nil, fmt.Errorf("erro ao buscar usuários: %v", err)
