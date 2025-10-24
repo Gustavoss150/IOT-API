@@ -12,7 +12,7 @@ type usersRepository struct {
 	DB *gorm.DB
 }
 
-func InitUsersRepository() (UsersRepository, error) {
+func InitUsersDatabase() (UsersRepository, error) {
 	db := config.DB
 	if db == nil {
 		return nil, errors.New("failed to connect to database")

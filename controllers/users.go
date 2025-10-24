@@ -16,7 +16,7 @@ func RegisterUser(c *gin.Context) {
 		return
 	}
 
-	usersRepo, err := usersRepo.InitUsersRepository()
+	usersRepo, err := usersRepo.InitUsersDatabase()
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": "Erro ao inicializar banco de usuários"})
 		return
@@ -49,7 +49,7 @@ func GetUserByID(c *gin.Context) {
 		return
 	}
 
-	usersRepo, err := usersRepo.InitUsersRepository()
+	usersRepo, err := usersRepo.InitUsersDatabase()
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": "Erro ao inicializar base de dados de usuários: " + err.Error()})
 		return
@@ -65,7 +65,7 @@ func GetUserByID(c *gin.Context) {
 }
 
 func ListUsers(c *gin.Context) {
-	usersRepo, err := usersRepo.InitUsersRepository()
+	usersRepo, err := usersRepo.InitUsersDatabase()
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": "Erro ao inicializar base de dados de usuários: " + err.Error()})
 		return
@@ -93,7 +93,7 @@ func UpdateUser(c *gin.Context) {
 		return
 	}
 
-	usersRepo, err := usersRepo.InitUsersRepository()
+	usersRepo, err := usersRepo.InitUsersDatabase()
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": "Erro ao inicializar base de dados de usuários"})
 		return
@@ -114,7 +114,7 @@ func DeleteUser(c *gin.Context) {
 		return
 	}
 
-	usersRepo, err := usersRepo.InitUsersRepository()
+	usersRepo, err := usersRepo.InitUsersDatabase()
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": "Erro ao inicializar base de dados de usuários: " + err.Error()})
 		return
