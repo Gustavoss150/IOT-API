@@ -9,6 +9,9 @@ type ReservationRepository interface {
 	Save(reservation *entities.Reservation) error
 	GetByID(id string) (*entities.Reservation, error)
 	HasReservationConflict(equipmentID string, start, end time.Time) (bool, error)
+	UpdateStatus(reservationID string, status entities.StatusReservation) error
+	GetPendingReservations() ([]*entities.Reservation, error)
+	GetReservationsByStatus(status entities.StatusReservation) ([]entities.Reservation, error)
 	GetAllReservationsByDay(day time.Time) ([]entities.Reservation, error)
 	GetByUserID(userID string) ([]entities.Reservation, error)
 	GetByMachineID(equipmentID string) ([]entities.Reservation, error)

@@ -36,12 +36,30 @@ func (r *reservationRepository) GetByID(id string) (*entities.Reservation, error
 func (r *reservationRepository) HasReservationConflict(equipmentID string, start, end time.Time) (bool, error) {
 	var count int64
 	err := r.DB.Model(&entities.Reservation{}).
-		Where("equipment_id = ? AND reservation_end > ? AND reservation_start < ?", equipmentID, start, end).
+		Where("equipment_id = ? AND status = ? AND reservation_end > ? AND reservation_start < ?", equipmentID, entities.Approved, start, end).
 		Count(&count).Error
 	if err != nil {
 		return false, err
 	}
 	return count > 0, nil
+}
+
+func (r *reservationRepository) UpdateStatus(reservationID string, status entities.StatusReservation) error {
+	return r.DB.Model(&entities.Reservation{}).
+		Where("id = ?", reservationID).
+		Update("status", status).Error
+}
+
+func (r *reservationRepository) GetPendingReservations() ([]*entities.Reservation, error) {
+	var reservations []*entities.Reservation
+	err := r.DB.Where("status = ?", entities.Pending).Find(&reservations).Error
+	return reservations, err
+}
+
+func (r *reservationRepository) GetReservationsByStatus(status entities.StatusReservation) ([]entities.Reservation, error) {
+	var reservations []entities.Reservation
+	err := r.DB.Where("status = ?", status).Find(&reservations).Error
+	return reservations, err
 }
 
 func (r *reservationRepository) GetAllReservationsByDay(day time.Time) ([]entities.Reservation, error) {
