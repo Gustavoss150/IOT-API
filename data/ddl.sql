@@ -5,7 +5,7 @@ CREATE TABLE `access_keys` (
   `updated_at` datetime DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   `deleted_at` datetime DEFAULT NULL,
   `type_key` enum('rfid','qrcode','pin','other') NOT NULL,
-  `status_key` enum('open','expired','used') NOT NULL,
+  `status_key` enum('closed','open') NOT NULL,
   `value` varchar(255) NOT NULL,
   `assigned_to` varchar(36) DEFAULT NULL,
   `reservation_id` varchar(36) DEFAULT NULL,
@@ -13,9 +13,7 @@ CREATE TABLE `access_keys` (
   UNIQUE KEY `idx_access_keys_value` (`value`),
   KEY `idx_access_keys_deleted_at` (`deleted_at`),
   KEY `idx_access_keys_assigned_to` (`assigned_to`),
-  KEY `idx_access_keys_reservation_id` (`reservation_id`),
-  CONSTRAINT `fk_access_keys_reservation` FOREIGN KEY (`reservation_id`) REFERENCES `reservations` (`id`) ON DELETE SET NULL ON UPDATE CASCADE,
-  CONSTRAINT `fk_access_keys_user` FOREIGN KEY (`assigned_to`) REFERENCES `users` (`id`) ON DELETE SET NULL ON UPDATE CASCADE
+  KEY `idx_access_keys_reservation_id` (`reservation_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 -- iot_api_db.event_logs definição
@@ -26,17 +24,18 @@ CREATE TABLE `event_logs` (
   `deleted_at` datetime DEFAULT NULL,
   `access_key_id` varchar(36) DEFAULT NULL,
   `user_id` varchar(36) DEFAULT NULL,
-  `reservation_id` varchar(36) DEFAULT NULL,
   `equipment_id` varchar(36) DEFAULT NULL,
+  `reservation_id` varchar(36) DEFAULT NULL,
   `action` enum('created','updated','deleted') NOT NULL,
   `message` text,
   PRIMARY KEY (`id`),
   KEY `idx_event_logs_deleted_at` (`deleted_at`),
   KEY `idx_event_logs_access_key_id` (`access_key_id`),
   KEY `idx_event_logs_user_id` (`user_id`),
-  KEY `idx_event_logs_reservation_id` (`reservation_id`),
   KEY `idx_event_logs_equipment_id` (`equipment_id`),
+  KEY `idx_event_logs_reservation_id` (`reservation_id`),
   CONSTRAINT `fk_event_logs_access_key` FOREIGN KEY (`access_key_id`) REFERENCES `access_keys` (`id`) ON DELETE SET NULL ON UPDATE CASCADE,
+  CONSTRAINT `fk_event_logs_equipment` FOREIGN KEY (`equipment_id`) REFERENCES `equipment` (`id`) ON DELETE SET NULL ON UPDATE CASCADE,
   CONSTRAINT `fk_event_logs_reservation` FOREIGN KEY (`reservation_id`) REFERENCES `reservations` (`id`) ON DELETE SET NULL ON UPDATE CASCADE,
   CONSTRAINT `fk_event_logs_user` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON DELETE SET NULL ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
@@ -89,4 +88,25 @@ CREATE TABLE `users` (
   UNIQUE KEY `idx_users_email` (`email`),
   UNIQUE KEY `idx_users_discord_id` (`discord_id`),
   KEY `idx_users_deleted_at` (`deleted_at`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+-- iot_api_db.bot_configs definição
+CREATE TABLE `bot_configs` (
+  `id` char(36) NOT NULL,
+  `created_at` datetime DEFAULT CURRENT_TIMESTAMP,
+  `updated_at` datetime DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  `deleted_at` datetime DEFAULT NULL,
+  `opening_time` datetime(3) NOT NULL,
+  `closing_time` datetime(3) NOT NULL,
+  `min_reservation` bigint NOT NULL DEFAULT '30',
+  `max_reservation_days` bigint NOT NULL DEFAULT '30',
+  `max_reservation_blocks` bigint NOT NULL DEFAULT '3',
+  `reservation_channel` varchar(100) DEFAULT NULL,
+  `reservation_approval_channel` varchar(100) DEFAULT NULL,
+  `holidays` json DEFAULT NULL,
+  `days_of_week` json DEFAULT NULL,
+  `admin_roles` json DEFAULT NULL,
+  `approver_roles` json DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  KEY `idx_bot_configs_deleted_at` (`deleted_at`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;

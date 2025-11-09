@@ -10,10 +10,10 @@ const (
 
 type EventLog struct {
 	BaseEntity
-	AccessKeyID   string     `gorm:"size:36;index" json:"access_key_id,omitempty"`
-	UserID        string     `gorm:"size:36;index" json:"user_id,omitempty"`
-	EquipmentID   string     `gorm:"size:36;index" json:"equipment_id,omitempty"`
-	ReservationID string     `gorm:"size:36;index" json:"reservation_id,omitempty"`
+	AccessKeyID   string     `gorm:"type:char(36);index" json:"access_key_id,omitempty"`
+	UserID        string     `gorm:"type:char(36);index" json:"user_id,omitempty"`
+	EquipmentID   string     `gorm:"type:char(36);index" json:"equipment_id,omitempty"`
+	ReservationID string     `gorm:"type:char(36);index" json:"reservation_id,omitempty"`
 	Action        ActionType `gorm:"type:ENUM('created','updated','deleted');not null" json:"action"`
 	Message       string     `gorm:"type:text" json:"message,omitempty"`
 

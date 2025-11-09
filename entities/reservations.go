@@ -12,9 +12,9 @@ const (
 
 type Reservation struct {
 	BaseEntity
-	UserID           string            `gorm:"size:36;index;not null" json:"user_id"`
-	EquipmentID      string            `gorm:"size:36;index;not null" json:"equipment_id"`
-	ResponsibleID    string            `gorm:"size:36;index" json:"responsible_id,omitempty"`
+	UserID           string            `gorm:"type:char(36);index;not null" json:"user_id"`
+	EquipmentID      string            `gorm:"type:char(36);index;not null" json:"equipment_id"`
+	ResponsibleID    string            `gorm:"type:char(36);index" json:"responsible_id,omitempty"`
 	ReservationStart time.Time         `gorm:"not null" json:"reservation_start"`
 	ReservationEnd   time.Time         `gorm:"not null" json:"reservation_end"`
 	Status           StatusReservation `gorm:"type:ENUM('approved','rejected','pending'); default:'pending'" json:"status"`
