@@ -40,6 +40,43 @@ func CreateReservation(reservationDTO dto.ReservationDTO, repo reservationRepo.R
 	return reservation, nil
 }
 
+func GetReservationByID(repo reservationRepo.ReservationRepository, reservationID string) (*entities.Reservation, error) {
+	return repo.GetByID(reservationID)
+}
+
+func GetUserReservations(repo reservationRepo.ReservationRepository, userID string) ([]entities.Reservation, error) {
+	if userID == "" {
+		return nil, errors.New("ID do usuário é obrigatório")
+	}
+	return repo.GetByUserID(userID)
+}
+
+func GetActiveReservations(repo reservationRepo.ReservationRepository, now time.Time) ([]entities.Reservation, error) {
+	allApproved, err := repo.GetReservationsByStatus(entities.Approved)
+	if err != nil {
+		return nil, err
+	}
+
+	var active []entities.Reservation
+	for _, r := range allApproved {
+		if IsReservationActive(r, now) {
+			active = append(active, r)
+		}
+	}
+	return active, nil
+}
+
+func GetApprovedReservationsByDay(repo reservationRepo.ReservationRepository, day time.Time) ([]entities.Reservation, error) {
+	if day.IsZero() {
+		return nil, errors.New("data é obrigatória")
+	}
+	return repo.GetApprovedReservationsByDay(day)
+}
+
+func GetPendingReservations(repo reservationRepo.ReservationRepository) ([]entities.Reservation, error) {
+	return repo.GetReservationsByStatus(entities.Pending)
+}
+
 func ApproveReservation(repo reservationRepo.ReservationRepository, reservationID string, responsibleID string) error {
 	reservation, err := repo.GetByID(reservationID)
 	if err != nil {
@@ -82,19 +119,4 @@ func IsReservationActive(reservation entities.Reservation, now time.Time) bool {
 	return reservation.Status == entities.Approved &&
 		now.After(reservation.ReservationStart) &&
 		now.Before(reservation.ReservationEnd)
-}
-
-func GetActiveReservations(repo reservationRepo.ReservationRepository, now time.Time) ([]entities.Reservation, error) {
-	allApproved, err := repo.GetReservationsByStatus(entities.Approved)
-	if err != nil {
-		return nil, err
-	}
-
-	var active []entities.Reservation
-	for _, r := range allApproved {
-		if IsReservationActive(r, now) {
-			active = append(active, r)
-		}
-	}
-	return active, nil
 }

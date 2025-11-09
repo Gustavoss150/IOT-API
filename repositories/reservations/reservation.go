@@ -62,11 +62,11 @@ func (r *reservationRepository) GetReservationsByStatus(status entities.StatusRe
 	return reservations, err
 }
 
-func (r *reservationRepository) GetAllReservationsByDay(day time.Time) ([]entities.Reservation, error) {
+func (r *reservationRepository) GetApprovedReservationsByDay(day time.Time) ([]entities.Reservation, error) {
 	var reservations []entities.Reservation
 	startOfDay := time.Date(day.Year(), day.Month(), day.Day(), 0, 0, 0, 0, day.Location())
 	endOfDay := startOfDay.Add(24 * time.Hour)
-	if err := r.DB.Where("reservation_start >= ? AND reservation_start < ?", startOfDay, endOfDay).Find(&reservations).Error; err != nil {
+	if err := r.DB.Where("status = ? AND reservation_start >= ? AND reservation_start < ?", entities.Approved, startOfDay, endOfDay).Find(&reservations).Error; err != nil {
 		return nil, errors.New("sem reservas encontradas para o dia especificado")
 	}
 	return reservations, nil

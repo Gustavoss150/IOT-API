@@ -8,4 +8,5 @@ import (
 
 func InitRoutes(router *gin.Engine) {
 	routes.UserRouter(router)
+	routes.ReservationRouter(router)
 }
